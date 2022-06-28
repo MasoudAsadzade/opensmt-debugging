@@ -132,8 +132,6 @@ fi
 
 
 
-echo $bmset
-
 echo "SMTSServer:"
 echo " - ${smtServer}"
 echo "Flavor:"
