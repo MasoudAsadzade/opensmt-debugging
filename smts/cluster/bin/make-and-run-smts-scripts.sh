@@ -178,8 +178,20 @@ mkdir -p ${scriptdir}
 mkdir -p ${resultdir}
 ${WORKSCRIPT} ${smtServer} ${lemma_sharing} ${partitioning} ${scriptdir} ${resultdir} ${config} ${bmset}
 
+n_job=0
 for script in ${scriptdir}/*.sh; do
     echo ${script};
+
+     ((n_job=n_job+1))
+    if  [ ${n_benchmarks} -gt 1000 ]
+      then
+          if  [ ${n_job} == 1000 ]
+          then
+            sleep 3600
+            n_job=0
+        fi
+    fi
+
     sbatch ${script};
     sleep 1;
 done
