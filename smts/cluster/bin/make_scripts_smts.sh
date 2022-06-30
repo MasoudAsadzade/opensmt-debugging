@@ -70,10 +70,10 @@ __EOF__
         cat << __EOF__ >> $script_dir/$script_name
  (
   echo $ex;
-  sh -c "/usr/bin/time -o \${smts_time}.${i}.time -f 'user: %U system: %S wall: %e CPU: %PCPU' python3 \$script $lemma $partition -o3 -pn $((port+i)) -fp \$ex";
+  sh -c "/usr/bin/time -o \${smts_time}.${i}.time -f 'user: %U system: %S wall: %e CPU: %PCPU' python3 \$script $lemma $partition -o3 -pn $((port+i)) -fp $ex";
  ) > \$output.${i}.out 2> \$output.${i}.err;
  out_path=\$output.${i}
- grep '^;' \$out_path.out > /dev/null && (cat \$out_path.out >> \$out_path.err; echo $ex'\n'error  > \$out_path.out) &
+ grep '^;' \$out_path.out > /dev/null && (cat \$out_path.out >> \$out_path.err; echo "$ex\nerror"  > \$out_path.out) &
 __EOF__
     done
     echo "wait" >> $script_dir/$script_name
