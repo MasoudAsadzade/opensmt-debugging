@@ -7,7 +7,7 @@ fi
 for file in $1/$2.*.smt2.bz2.sh.*.out; do
     name=$(echo $file |sed 's,'$1'/'$2'\.\(.*\)\.smt2\.bz2\.sh\.\(.*\).out,\1,g');
     num=$(echo $file |sed 's,'$1'/'$2'\.\(.*\)\.smt2\.bz2\.sh\.\(.*\).out,\2,g');
-    inst=$(basename $(head -1 $file) .smt2.bz2);
+    inst=$(echo $(head -1 $file) |sed 's/.smt2.bz2$//g');
     if (grep '^sat' $file > /dev/null); then
         result=sat
     elif (grep '^unsat' $file > /dev/null); then
