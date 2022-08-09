@@ -22,9 +22,10 @@ fi
 xd=$1
 yd=$2
 
-
-regex='\(.*\)-results-\([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\)-\(.*\)-\([A-Z_]*\)'
-
+# osmt2-22306e2e-results-2022-06-15-non-incremental-QF_LIA_Averest_parallel_prefix_sum
+# smts-cubeandconquer-results-2022-08-02-lemma_sharingpartitioning-QF_LIA
+regex='\(.*\)-results-\([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\)-\(.*\)-\([A-Z_]*\)_\(.*\)'
+#regex='osmt2-\(.*\)-results-\([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\)-\(.*\)-\([A-Z_]*\)_\(.*\)'
 x_branch=$(echo ${xd} |sed s/${regex}/\\1/g)
 x_branch=(${x_branch//-/ })
 project_x=${x_branch[0]}
