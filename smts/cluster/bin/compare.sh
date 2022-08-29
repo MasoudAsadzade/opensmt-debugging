@@ -9,7 +9,7 @@ PLOTTING_BIN_ROOT=${CLUSTER_BIN_ROOT}/../../../plotting/bin
 
 EXTRACTOR=${CLUSTER_BIN_ROOT}/extract_results_time_smts.sh
 echo $EXTRACTOR
-GNUPLOTTOR=${PLOTTING_BIN_ROOT}/make_scatterplot_time.py
+GNUPLOTTOR=${PLOTTING_BIN_ROOT}/make_smts_scatterplot.py
 PLOT_MAKEFILE=${PLOTTING_BIN_ROOT}/../Makefile
 
 export epstopdf=${PLOTTING_BIN_ROOT}/epstopdf
@@ -25,7 +25,7 @@ yd=$2
 # osmt2-22306e2e-results-2022-06-15-non-incremental-QF_LIA_Averest_parallel_prefix_sum
 # smts-cubeandconquer-results-2022-08-02-lemma_sharingpartitioning-QF_LIA
 regex='\(.*\)-results-\([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\)-\(.*\)-\([A-Z_]*\)_\(.*\)'
-#regex='osmt2-\(.*\)-results-\([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\)-\(.*\)-\([A-Z_]*\)_\(.*\)'
+
 x_branch=$(echo ${xd} |sed s/${regex}/\\1/g)
 x_branch=(${x_branch//-/ })
 project_x=${x_branch[0]}
