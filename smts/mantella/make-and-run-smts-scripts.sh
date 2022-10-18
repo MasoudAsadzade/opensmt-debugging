@@ -5,8 +5,9 @@ function get_abs_path {
 }
 
 SCRIPT_ROOT=$(get_abs_path $(dirname $0))
-
-BMBASE=${BMBASE:-/home/masoud/dev/benchmarks}
+BMBASE=${BMBASE:-/home/masoud/dev/benchmarks/40minuteUnsolvedHPC}
+#BMBASE=${BMBASE:-/home/masoud/dev/benchmarks/subdiv}
+#BMBASE=${BMBASE:-/home/masoud/dev/benchmarks/SMT-LIB-benchmarks}
 DEFAULTSMTS=${DEFAULTSMTS:-/home/masoud/dev/SMTS/server/smts.py}
 DEFAULTCONFIG=empty.smt2
 WORKSCRIPT=${SCRIPT_ROOT}/make_scripts_smts.sh
@@ -78,15 +79,15 @@ if [ ! -f $smtServer ]; then
 fi
 
 if [[ ${lemma_sharing} == true ]]; then
-    lemma_sharing_str="lemma_sharing"
+    lemma_sharing_str="Lemma_sharing"
 else
-    lemma_sharing_str="non-lemma_sharing"
+    lemma_sharing_str="Non-lemma_sharing"
 fi
 
 if [[ ${partitioning} == true ]]; then
-    partitioning_str="partitioning"
+    partitioning_str="Partitioning"
 else
-    partitioning_str="non-partitioning"
+    partitioning_str="Non-partitioning"
 fi
 
 if [ ${benchmarks} == QF_UF ]; then
@@ -154,6 +155,9 @@ ${WORKSCRIPT} ${smtServer} ${lemma_sharing} ${partitioning} ${scriptdir} ${resul
 for script in ${scriptdir}/*.sh; do
     echo ${script};
     sh ${script};
+    sleep 1;
+    killall solver_opensmt;
+    pkill -9 lemma_server;
     sleep 1;
 done
 
