@@ -3,11 +3,11 @@
 import sys
 
 # Change the timeout here if needed
-to = 1200
+to = 2400
 
 usage = """
 %s -- create scatter plot gnuplot scripts using tex driver
-Usage: %s <x-res> <y-res> <x-label> <y-label> <div> <subdiv> <output>
+Usage: %s <x-res> <y-res> <x-label> <y-label> <output>
 <x-res> and <y-res> are the result files for horizontal
 and vertical axis.  The results files should consist of
 lines of the form
@@ -23,14 +23,11 @@ script assumes %d seconds time out
 """
 
 if __name__ == '__main__':
-    if len(sys.argv) != 8:
+    if len(sys.argv) != 7:
         print(usage % (sys.argv[0], sys.argv[0], to))
         sys.exit(1)
 
-    output = sys.argv[7]
-
-    division = sys.argv[5].replace("_", "\\\\_")
-    subdivision = sys.argv[6].replace("_", "\\\\_")
+    output = sys.argv[5]
 
     x_l = open(sys.argv[1], 'r').readlines()
     y_l = open(sys.argv[2], 'r').readlines()
@@ -128,38 +125,39 @@ if __name__ == '__main__':
 
     postProc(x_res, bnd)
     postProc(y_res, bnd)
-
+    title = sys.argv[3] + " vs ", sys.argv[4]
     print('#!/usr/bin/env gnuplot')
-#    print('set term epslatex standalone color size 8, 4')
-    print('set term pngcairo')
-
+    print('set title "%s"' % sys.argv[6])
+    print('set xlabel \'{/Helvetica-Oblique x}\'')
+    print('set ylabel \'{/Helvetica-Oblique y}\'')
+    print('set term jpeg size 1024,850 enhanced font \'Helvetica:Bold,5\'')
+    
+    print('set key inside right top vertical Right noreverse enhanced autotitles box linetype -1 linewidth 1.000')
+    #print('set terminal pngcairo enhanced color lw 3 size 3,2 font \'Arial-Bold\'')
+    print('set grid')
+    print('set border linewidth 1')
     print('set output "%s"' % output)
     print('set size square')
-    print('set size 0.8, 0.8')
-    print('set title "%s %s"' % (division, subdivision))
+    print('set size 0.95, 0.95')
     print('set xlabel "%s"' % sys.argv[3])
     print('set ylabel "%s"' % sys.argv[4])
     if (use_log):
-        print('set logscale x')
-        print('set logscale y')
+     print('set logscale x')
+     print('set logscale y')
     print('set key right bottom')
-    print('set xrange [%f:%f]' % (low, bnd2))
-    print('set yrange [%f:%f]' % (low, bnd2))
-    print('set pointsize 1.5')
-    print('set arrow from graph 0, first %f to %f,%f nohead' % (to, to, to))
-    print('set arrow from %f, graph 0 to %f,%f nohead' % (to, to, to))
+    print('set xrange [%f:%f]' % (low, bnd))
+    
+    print('set yrange [%f:%f]' % (low, bnd))
+    print('set pointsize 1.2')
     print('set arrow from graph 0, first %f to %f,%f nohead' % (bnd, bnd, bnd))
     print('set arrow from %f, graph 0 to %f,%f nohead' % (bnd, bnd, bnd))
     print('set arrow from %f, graph 0 to graph .98, graph -.07 backhead lt 2' % bnd)
-    print('set label "t/o" at graph .95, graph -0.1')
-    print('set arrow from %f, graph 0 to graph 1.05, graph -.04 backhead lt 2' % bnd2)
-    print('set label "m/o" at graph 1.05, graph -0.06')
+    print('set label "timout: %f" at graph .95, graph -0.04' % to)
     print('set label "sp %.02f" at graph 1.01,1.0' % speedup)
     print('set label "sp tot %.02f" at graph 1.01,0.9' % (x_total/float(y_total)))
     print('set label "solved x %d" at graph 1.02,0.8' % solved_x)
     print('set label "solved y %d" at graph 1.02,0.7' % solved_y)
-    print('plot x title "" lc "black", "-" title "" with point pointtype 2 lc "black", "-" title "" with points pointtype 4 lc "black", "-" title "" with points pointtype 3 lc "black", "-" title "" with points pointtype 5 lc 1')
-
+    print('plot x title "" lc "red", "-" title "" with point pointtype 3 lc "blue", "-" title "" with points pt 4 lc rgb "black", "-" title "" with points pointtype 3 lc "black", "-" title "" with points pointtype 5 lc 1')
     sat_strings = []
     unsat_strings = []
     ukn_strings = []
@@ -189,4 +187,5 @@ if __name__ == '__main__':
     print("e")
     print("\n".join(fail_strings))
     print("e")
+
 
