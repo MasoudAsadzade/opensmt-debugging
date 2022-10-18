@@ -21,7 +21,7 @@ fi
 xd=$1
 yd=$2
 
-regex='\(.*\)-results-\([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\)-\(.*\)-\([A-Z_]*\)_\(.*\)'
+regex='\(.*\)-results-\([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\)-\(.*\)-\(.*\)'
 
 x_branch=$(echo ${xd} |sed s/${regex}/\\1/g)
 x_branch=(${x_branch//-/ })
@@ -67,7 +67,7 @@ ${GNUPLOTTOR} ${xd}.list ${yd}.list \
     ${name}.gp
 echo "done."
 echo "making "
-make -f ${PLOT_MAKEFILE} figures/incremental-smts.png
+make -f ${PLOT_MAKEFILE} ${name}.png
 echo "done."
 
 echo "The figure is available in"
