@@ -36,6 +36,9 @@ counter=0
 # Total process = 1 smts_server + 50 solver_client + 1 lemma_server
 n_smts=1
 
+# Starting port
+port=3000
+
 
 while [[ $# > 0 ]]; do
     ex=$1;
@@ -62,10 +65,10 @@ __EOF__
         cat << __EOF__ >> $script_dir/$script_name
  (
   echo $ex;
-  sh -c "/usr/bin/time -o \${smts_time}.${i}.time -f 'user: %U system: %S wall: %e CPU: %PCPU' python3 \$script -o50 $lemma $partition -fp $ex";
- ) > \$output.${i}.out 2> \$output.${i}.err;
- out_path=\$output.${i}
- grep '^;' \$out_path.out > /dev/null && (cat \$out_path.out >> \$out_path.err; echo "$ex\nerror"  > \$out_path.out) &
+  sh -c "/usr/bin/time -o \${smts_time}.${i}.time -f 'user: %U system: %S wall: %e CPU: %PCPU' python3 \$script -o50 $lemma $partition -pn $((port+i)) -fp $ex";
+ ) > \$output.${i}.out 2> \$output.${i}.err &
+ out_path=\$output.${i} 
+ grep '^;' \$out_path.out > /dev/null && (cat \$out_path.out >> \$out_path.err; echo "$ex\nerror"  > \$out_path.out)
 __EOF__
     done
     echo "wait" >> $script_dir/$script_name
