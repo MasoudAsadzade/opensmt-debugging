@@ -63,7 +63,7 @@ echo "Plotting "
 ${GNUPLOTTOR} ${xd}.list ${yd}.list \
 	  "${x_branch} ${x_date}"\
     "${y_branch} ${y_date}" \
-    ${name}.png ${x_div} > \
+    ${name}.png ${x_div} $(wc -l < ${xd}.list) $(wc -l < ${yd}.list)> \
     ${name}.gp
 echo "done."
 echo "making "
