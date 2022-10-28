@@ -23,7 +23,7 @@ script assumes %d seconds time out
 """
 
 if __name__ == '__main__':
-    if len(sys.argv) != 7:
+    if len(sys.argv) <= 7:
         print(usage % (sys.argv[0], sys.argv[0], to))
         sys.exit(1)
 
@@ -128,12 +128,10 @@ if __name__ == '__main__':
     title = sys.argv[3] + " vs ", sys.argv[4]
     print('#!/usr/bin/env gnuplot')
     print('set title "%s"' % sys.argv[6])
-    print('set xlabel \'{/Helvetica-Oblique x}\'')
-    print('set ylabel \'{/Helvetica-Oblique y}\'')
+    print('set xlabel \'{/Noto Serif Kannada x}\'')
+    print('set ylabel \'{/Noto Serif Kannada y}\'')
     print('set term jpeg size 1024,850 enhanced font \'Helvetica:Bold,5\'')
-    
     print('set key inside right top vertical Right noreverse enhanced autotitles box linetype -1 linewidth 1.000')
-    #print('set terminal pngcairo enhanced color lw 3 size 3,2 font \'Arial-Bold\'')
     print('set grid')
     print('set border linewidth 1')
     print('set output "%s"' % output)
@@ -142,21 +140,30 @@ if __name__ == '__main__':
     print('set xlabel "%s"' % sys.argv[3])
     print('set ylabel "%s"' % sys.argv[4])
     if (use_log):
-     print('set logscale x')
-     print('set logscale y')
+        print('set logscale x')
+        print('set logscale y')
     print('set key right bottom')
     print('set xrange [%f:%f]' % (low, bnd))
-    
+
     print('set yrange [%f:%f]' % (low, bnd))
     print('set pointsize 1.2')
+    #print('set arrow from graph 0, first %f to %f,%f nohead' % (to, to, to))
+    #print('set arrow from %f, graph 0 to %f,%f nohead' % (to, to, to))
     print('set arrow from graph 0, first %f to %f,%f nohead' % (bnd, bnd, bnd))
     print('set arrow from %f, graph 0 to %f,%f nohead' % (bnd, bnd, bnd))
     print('set arrow from %f, graph 0 to graph .98, graph -.07 backhead lt 2' % bnd)
     print('set label "timout: %f" at graph .95, graph -0.04' % to)
+
+    # print('set arrow from %f, graph 0 to graph 1.05, graph -.04 backhead lt 2' % bnd2)
+    # print('set multiplot layout 4,4 margins 0.05,0.95,0.05,0.95 spacing screen 0.0')
+    # print('set label "m/o" at graph 1.05, graph -0.06')
+
     print('set label "sp %.02f" at graph 1.01,1.0' % speedup)
     print('set label "sp tot %.02f" at graph 1.01,0.9' % (x_total/float(y_total)))
-    print('set label "solved x %d" at graph 1.02,0.8' % solved_x)
-    print('set label "solved y %d" at graph 1.02,0.7' % solved_y)
+    print('set label "solved x: %d" at graph 1.02,0.8' % solved_x)
+    print('set label "solved x/all: %.02f" at graph 1.02,0.7' % ((solved_x/float(sys.argv[7]))*100))
+    print('set label "solved y: %d" at graph 1.02,0.6' % solved_y)
+    print('set label "solved y/all: %.02f" at graph 1.02,0.5' % ((solved_y/float(sys.argv[8]))*100))
     print('plot x title "" lc "red", "-" title "" with point pointtype 3 lc "blue", "-" title "" with points pt 4 lc rgb "black", "-" title "" with points pointtype 3 lc "black", "-" title "" with points pointtype 5 lc 1')
     sat_strings = []
     unsat_strings = []
@@ -166,10 +173,10 @@ if __name__ == '__main__':
         if name in y_res:
             if (x_res[name][0] == 'sat' and \
                 y_res[name][0] == 'unsat') or \
-               (x_res[name][0] == 'unsat' and \
-                y_res[name][0] == 'sat'):
+                    (x_res[name][0] == 'unsat' and \
+                     y_res[name][0] == 'sat'):
                 print("Oops: %s %s %s" %
-                        (name, x_res[name], y_res[name]), file=sys.stderr)
+                      (name, x_res[name], y_res[name]), file=sys.stderr)
                 fail_strings.append("%.02f %.02f # %s" % (x_res[name][1], y_res[name][1], name))
 
             elif (x_res[name][0] == 'sat') or (y_res[name][0] == 'sat'):
@@ -187,5 +194,3 @@ if __name__ == '__main__':
     print("e")
     print("\n".join(fail_strings))
     print("e")
-
-
