@@ -6,10 +6,10 @@ function get_abs_path {
 
 CLUSTER_BIN_ROOT=$(get_abs_path $(dirname $0))
 PLOTTING_BIN_ROOT=${CLUSTER_BIN_ROOT}/../../../plotting/bin
-
+#EXTRACTOR1=${CLUSTER_BIN_ROOT}/extract_res_osmt.sh
 EXTRACTOR=${CLUSTER_BIN_ROOT}/extract_results_time_smts.sh
 echo $EXTRACTOR
-GNUPLOTTOR=${PLOTTING_BIN_ROOT}/make_smts_scatterplot.py
+GNUPLOTTOR=${PLOTTING_BIN_ROOT}/make_scatterplot_time.py
 PLOT_MAKEFILE=${PLOTTING_BIN_ROOT}/../Makefile
 
 export epstopdf=${PLOTTING_BIN_ROOT}/epstopdf
@@ -24,8 +24,7 @@ yd=$2
 
 # osmt2-22306e2e-results-2022-06-15-non-incremental-QF_LIA_Averest_parallel_prefix_sum
 # smts-cubeandconquer-results-2022-08-02-lemma_sharingpartitioning-QF_LIA
-regex='\(.*\)-results-\([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\)-\(.*\)-\([A-Z_]*\)_\(.*\)'
-
+regex='\(.*\)-results-\([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\)-\(.*\)-\(.*\)'
 x_branch=$(echo ${xd} |sed s/${regex}/\\1/g)
 x_branch=(${x_branch//-/ })
 project_x=${x_branch[0]}
@@ -64,12 +63,12 @@ echo "done."
 name=figures/${x_track}-${x_div}-${x_branch}-${x_date}_vs_${y_branch}-${y_date}
 
 mkdir -p figures
-
+echo xdiv ${xd}
 echo "Plotting "
 ${GNUPLOTTOR} ${xd}.list ${yd}.list \
     "${x_branch} ${x_date}"\
     "${y_branch} ${y_date}" \
-    ${name}.png > \
+    ${name}.png ${x_div} $(wc -l < ${xd}.list) $(wc -l < ${yd}.list)> \
     ${name}.gp
 echo "done."
 
